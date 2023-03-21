@@ -1,23 +1,71 @@
 import React from "react";
-import { Button } from 'react-bootstrap';
+import { Button, Container, Row, Col, Image } from 'react-bootstrap';
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import * as constanst from '../../constants/productConst'
+import ProductModal from "../productModal";
+import addImg from '../../images/add.png'
 import './style.css';
 
 class ProductListComponent extends React.Component {
 
-    handleOnClick() {
-        alert("click")
+    constructor(props) {
+        super(props);
+        this.state = {
+            productList: [],
+            selectProduct: null,
+            isShowModal: false
+        };
+        this.closeModal = this.closeModal.bind(this)
+        this.updateProduct = this.updateProduct.bind(this)
+    }
+
+    componentDidMount() {
+        this.setState({ productList: constanst.MOCK_PRODUCT_LIST });
+    }
+
+    closeModal() {
+        this.setState({ isShowModal: false });
+        this.setState({ selectProduct: null });
+    }
+
+    updateProduct(product) {
+        let index = this.state.productList.findIndex((p) => p.id === product.id)
+        if (index > 0) {
+            let newProductList = this.state.productList;
+            newProductList[index] = product
+            this.setState({ productList: newProductList })
+        } else {
+            let newProductList = this.state.productList;
+            newProductList.push(product)
+            this.setState({ productList: newProductList })
+        }
+        this.closeModal();
+    }
+
+    addProduct() {
+        this.setState({ isShowModal: true });
+    }
+
+    editProduct(id) {
+        let index = this.state.productList.findIndex((p) => p.id === id)
+        this.setState({ selectProduct: this.state.productList[index] })
+        this.setState({ isShowModal: true });
+    }
+
+    removeProduct(id) {
+        let index = this.state.productList.findIndex((p) => p.id === id)
+        let newProductList = this.state.productList;
+        newProductList.splice(index, 1)
+
+        this.setState({ productList: newProductList })
+        alert(`item deleted`)
     }
 
     headerContent() {
         return (
             <Col>
-                <div className="card">
-                    <div className="container content">
+                <div className="bannerCard">
+                    <div className="content">
                         <p>This is the sample shopping web size can support for responsive UI size sm, md, lg. also container feature add, edit and delete item by click on item card</p>
                     </div>
                 </div>
@@ -28,25 +76,59 @@ class ProductListComponent extends React.Component {
 
     productCard(item) {
         return (
-            <Col sm={12} md={6} xl={3}>
+            <Col sm={12} md={6}>
                 <div className="card">
-                    <div className="container">
-                        <p>Name: {item.name}</p>
-                        <p>Price: {item.price}</p>
-                        <p>Description: {item.description}</p>
-                        <div className="footer">
-                            <Button variant="danger" onClick={() => this.handleOnClick()} >delete</Button>
-                            <Button variant="primary" onClick={() => this.handleOnClick()} >edit</Button>
-                        </div>
-                    </div>
+                    <Row>
+                        <Col>
+                            <div className="image">
+                                <Image
+                                    style={{ width: "100%", height: "100%" }}
+                                    src={item.img}
+                                />
+                            </div>
+                        </Col>
+                        <Col>
+                            <p className="pname">Name: {item.name}</p>
+                            <p>Price: {item.price}฿</p>
+                            <p className="pdesc">Description: {item.description}</p>
+                            <div className="footer">
+                                <Button variant="primary" onClick={() => this.editProduct(item.id)} >edit</Button>
+                                <Button style={{ marginLeft: '5px' }} variant="secondary" onClick={() => this.removeProduct(item.id)} >delete</Button>
+                            </div>
+                        </Col>
+                    </Row>
                 </div>
             </Col>
-
         );
+    }
+
+    addProductCard() {
+        return (
+            <Col sm={12} md={6}>
+                <div className="card" onClick={() => this.addProduct()}>
+                    <Row>
+                        <Col>
+                            <div className="image">
+                                <Image
+                                    style={{ width: "200x", height: "200px" }}
+                                    src={addImg}
+                                />
+                            </div>
+                        </Col>
+                        <Col>
+                            <p className="pname">Add New Product</p>
+                        </Col>
+                    </Row>
+                </div>
+            </Col>
+        );
+
     }
 
     render = () => (
         <div className="frame">
+            <ProductModal show={this.state.isShowModal} onClose={this.closeModal} onConfirm={(p) => this.updateProduct(p)} product={this.state.selectProduct} />
+
             <div className="header">
                 <Container>
                     <Row>
@@ -58,15 +140,16 @@ class ProductListComponent extends React.Component {
                 <Container>
                     <Row>
                         <Col>
-                            <div className="container title">
-                                <h1>Products</h1>
+                            <div className="title">
+                                <label>PRODUCTS</label>
                             </div>
                         </Col>
                     </Row>
                     <Row>
-                        {constanst.MOCK_PRODUCT_LIST.map((item, i) => {
+                        {this.state.productList.map((item, i) => {
                             return this.productCard(item)
                         })}
+                        {this.addProductCard()}
                     </Row>
                 </Container>
 
