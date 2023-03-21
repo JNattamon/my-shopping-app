@@ -6,4 +6,6 @@ candidate: Nattamon Janthong-in
 2. MySQL v5.5
 
 ## วิธีการ run
-- 
+- cd my-shopping-app
+- npm install 
+- npm start
