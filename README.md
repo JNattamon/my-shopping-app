@@ -5,7 +5,7 @@ candidate: Nattamon Janthong-in
 1. ReactJS
 2. MySQL v5.5
 
-## วิธีการ run
+## วิธีการ run web
 - cd my-shopping-app
 - npm install 
 - npm start

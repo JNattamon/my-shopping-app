@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
-import ProductListComponent from './productListComponent';
+import ProductListComponent from '../components/productListComponent';
 
 class Main extends React.Component {
   render = () => (

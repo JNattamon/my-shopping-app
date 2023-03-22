@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Container, Row, Col, Image } from 'react-bootstrap';
+import LinesEllipsis from 'react-lines-ellipsis'
 
 import * as constanst from '../../constants/productConst'
 import ProductModal from "../productModal";
@@ -66,7 +67,7 @@ class ProductListComponent extends React.Component {
             <Col>
                 <div className="bannerCard">
                     <div className="content">
-                        <p>This is the sample shopping web size can support for responsive UI size sm, md, lg. also container feature add, edit and delete item by click on item card</p>
+                        <p>This is the sample shopping web size can support for responsive UI size sm, md, lg. also container feature add by click on add card, edit and delete item by click on item card</p>
                     </div>
                 </div>
             </Col>
@@ -79,21 +80,43 @@ class ProductListComponent extends React.Component {
             <Col sm={12} md={6}>
                 <div className="card">
                     <Row>
-                        <Col>
-                            <div className="image">
-                                <Image
-                                    style={{ width: "100%", height: "100%" }}
-                                    src={item.img}
-                                />
-                            </div>
+                        <Col sm={12} md={6} lg={6} style={{ textAlign: "center" }}>
+                            <Image
+                                style={{ width: "100%", maxWidth: "200px" }}
+                                src={item.img}
+                            />
                         </Col>
-                        <Col>
-                            <p className="pname">Name: {item.name}</p>
-                            <p>Price: {item.price}฿</p>
-                            <p className="pdesc">Description: {item.description}</p>
+                        <Col sm={12} md={6}>
+                            <Row style={{ marginBottom: "20px" }}>
+                                <LinesEllipsis
+                                    className="pname"
+                                    text={`Name: ${item.name}`}
+                                    maxLine='2'
+                                    ellipsis='...'
+                                    trimRight
+                                    basedOn='letters'
+                                />
+                                <label>
+                                    Price: {item.price}฿
+                                </label>
+                                <LinesEllipsis
+                                    className="pdesc"
+                                    text={`Description: ${item.description}`}
+                                    maxLine='3'
+                                    ellipsis='...'
+                                    trimRight
+                                    basedOn='letters'
+                                />
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button style={{ width: "100%" }} variant="primary" onClick={() => this.editProduct(item.id)} >edit</Button>
+                                </Col>
+                                <Col>
+                                    <Button style={{ width: "100%" }} variant="secondary" onClick={() => this.removeProduct(item.id)} >delete</Button>
+                                </Col>
+                            </Row>
                             <div className="footer">
-                                <Button variant="primary" onClick={() => this.editProduct(item.id)} >edit</Button>
-                                <Button style={{ marginLeft: '5px' }} variant="secondary" onClick={() => this.removeProduct(item.id)} >delete</Button>
                             </div>
                         </Col>
                     </Row>
@@ -107,13 +130,11 @@ class ProductListComponent extends React.Component {
             <Col sm={12} md={6}>
                 <div className="card" onClick={() => this.addProduct()}>
                     <Row>
-                        <Col>
-                            <div className="image">
-                                <Image
-                                    style={{ width: "200x", height: "200px" }}
-                                    src={addImg}
-                                />
-                            </div>
+                        <Col style={{ textAlign: "center" }}>
+                            <Image
+                                style={{ width: "100%", maxWidth: "200px" }}
+                                src={addImg}
+                            />
                         </Col>
                         <Col>
                             <p className="pname">Add New Product</p>
