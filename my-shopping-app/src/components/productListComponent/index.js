@@ -116,8 +116,6 @@ class ProductListComponent extends React.Component {
                                     <Button style={{ width: "100%" }} variant="secondary" onClick={() => this.removeProduct(item.id)} >delete</Button>
                                 </Col>
                             </Row>
-                            <div className="footer">
-                            </div>
                         </Col>
                     </Row>
                 </div>
@@ -173,9 +171,13 @@ class ProductListComponent extends React.Component {
                         {this.addProductCard()}
                     </Row>
                 </Container>
+            </div>
+            <div className="footer">
 
             </div>
         </div>
+
+
     );
 }
 
